@@ -45,6 +45,21 @@ Documentação completa (arquitetura, endpoints cobertos, decisões de schema) e
 poetry run mkdocs serve
 ```
 
+## Tecnologias
+
+| Área | Tecnologias |
+|---|---|
+| Linguagem e dependências | Python 3.12, Poetry |
+| Pipeline de dados | httpx, Pydantic, pandas, fastparquet, python-dotenv, FastF1 |
+| Dashboard e visualização | Streamlit, Altair, Plotly, Matplotlib |
+| Qualidade e testes | Ruff, pytest, pytest-cov, respx |
+| Documentação | MkDocs Material |
+| Automação e CI/CD | Taskipy, GitHub Actions |
+| Fonte de dados | [OpenF1 API](https://openf1.org/) |
+| Formatos de dados | JSON (Bronze), Parquet (Silver/Gold) |
+
+Detalhes de uso de cada tecnologia em [Tecnologias](docs/tecnologias.md).
+
 ## Testes e qualidade
 
 ```bash

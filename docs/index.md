@@ -33,4 +33,4 @@ poetry run python -m f1_project.pipeline --years 2023 2024 2025
 poetry run streamlit run src/f1_project/dashboard/app.py
 ```
 
-Veja [Execução](execucao.md) para detalhes dos parâmetros e [Arquitetura](arquitetura.md) para o fluxo de dados completo.
+Veja [Execução](execucao.md) para detalhes dos parâmetros, [Arquitetura](arquitetura.md) para o fluxo de dados completo e [Tecnologias](tecnologias.md) para a stack usada em cada área do projeto.
