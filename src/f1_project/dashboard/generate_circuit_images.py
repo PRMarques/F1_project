@@ -18,7 +18,6 @@ import fastf1
 import matplotlib.pyplot as plt
 import numpy as np
 
-
 OUTPUT_DIR = Path(__file__).resolve().parent / "assets" / "circuits"
 CACHE_DIR = Path(__file__).resolve().parent / ".fastf1-cache"
 
@@ -31,9 +30,7 @@ def asset_slug(value: str) -> str:
 
 def rotate(points: np.ndarray, angle_degrees: float) -> np.ndarray:
     angle = np.deg2rad(angle_degrees)
-    matrix = np.array(
-        [[np.cos(angle), np.sin(angle)], [-np.sin(angle), np.cos(angle)]]
-    )
+    matrix = np.array([[np.cos(angle), np.sin(angle)], [-np.sin(angle), np.cos(angle)]])
     return points @ matrix
 
 

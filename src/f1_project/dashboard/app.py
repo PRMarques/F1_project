@@ -6,14 +6,14 @@ Execute com:
 
 from __future__ import annotations
 
-import math
-import time
 import base64
-from html import escape
-from datetime import datetime
-from pathlib import Path
+import math
 import re
+import time
 import unicodedata
+from datetime import datetime
+from html import escape
+from pathlib import Path
 from typing import Any
 
 import pandas as pd
@@ -306,8 +306,13 @@ def chart_style(
         plot_bgcolor=PANEL,
         font=dict(color=TEXT, family="Arial", size=10),
         legend=dict(
-            orientation="h", y=1.1, x=1, xanchor="right", title=None,
-            font=dict(size=9), itemsizing="constant",
+            orientation="h",
+            y=1.1,
+            x=1,
+            xanchor="right",
+            title=None,
+            font=dict(size=9),
+            itemsizing="constant",
         ),
         showlegend=show_legend,
         hoverlabel=dict(bgcolor="#202631", font_color=TEXT),
@@ -320,19 +325,57 @@ def chart_style(
 def country_flag(country_code: str | None, driver_acronym: str | None = None) -> str:
     """Gera a bandeira pela nacionalidade, nunca pela sigla exibida do piloto."""
     alpha3_to_alpha2 = {
-        "ARG": "AR", "AUS": "AU", "AUT": "AT", "BEL": "BE", "BRA": "BR",
-        "CAN": "CA", "CHN": "CN", "COL": "CO", "DEN": "DK", "ESP": "ES",
-        "FIN": "FI", "FRA": "FR", "GBR": "GB", "GER": "DE", "IRL": "IE",
-        "ITA": "IT", "JPN": "JP", "MEX": "MX", "MON": "MC", "NED": "NL",
-        "NOR": "NO", "NZL": "NZ", "POL": "PL", "POR": "PT", "RUS": "RU",
-        "SUI": "CH", "SWE": "SE", "THA": "TH", "USA": "US",
+        "ARG": "AR",
+        "AUS": "AU",
+        "AUT": "AT",
+        "BEL": "BE",
+        "BRA": "BR",
+        "CAN": "CA",
+        "CHN": "CN",
+        "COL": "CO",
+        "DEN": "DK",
+        "ESP": "ES",
+        "FIN": "FI",
+        "FRA": "FR",
+        "GBR": "GB",
+        "GER": "DE",
+        "IRL": "IE",
+        "ITA": "IT",
+        "JPN": "JP",
+        "MEX": "MX",
+        "MON": "MC",
+        "NED": "NL",
+        "NOR": "NO",
+        "NZL": "NZ",
+        "POL": "PL",
+        "POR": "PT",
+        "RUS": "RU",
+        "SUI": "CH",
+        "SWE": "SE",
+        "THA": "TH",
+        "USA": "US",
     }
     driver_to_alpha2 = {
-        "ALB": "TH", "ALO": "ES", "ANT": "IT", "BEA": "GB",
-        "BOR": "BR", "COL": "AR", "DOO": "AU", "GAS": "FR",
-        "HAD": "FR", "HAM": "GB", "HUL": "DE", "LAW": "NZ",
-        "LEC": "MC", "NOR": "GB", "OCO": "FR", "PIA": "AU",
-        "RUS": "GB", "SAI": "ES", "STR": "CA", "TSU": "JP",
+        "ALB": "TH",
+        "ALO": "ES",
+        "ANT": "IT",
+        "BEA": "GB",
+        "BOR": "BR",
+        "COL": "AR",
+        "DOO": "AU",
+        "GAS": "FR",
+        "HAD": "FR",
+        "HAM": "GB",
+        "HUL": "DE",
+        "LAW": "NZ",
+        "LEC": "MC",
+        "NOR": "GB",
+        "OCO": "FR",
+        "PIA": "AU",
+        "RUS": "GB",
+        "SAI": "ES",
+        "STR": "CA",
+        "TSU": "JP",
         "VER": "NL",
     }
     acronym = str(driver_acronym or "").strip().upper()
@@ -346,7 +389,7 @@ def country_flag(country_code: str | None, driver_acronym: str | None = None) ->
         '<span class="driver-flag">'
         f'<img class="driver-flag-img" src="https://flagcdn.com/w40/{safe_code}.png" '
         f'alt="Bandeira {escape(code)}" loading="lazy">'
-        '</span>'
+        "</span>"
     )
 
 
@@ -358,7 +401,13 @@ def recent_results_html(results: list[str] | None) -> str:
 
     badges = []
     for value in values:
-        css_class = " recent-win" if value == "V" else " recent-dnf" if value in {"DNF", "DNS", "DSQ"} else ""
+        css_class = (
+            " recent-win"
+            if value == "V"
+            else " recent-dnf"
+            if value in {"DNF", "DNS", "DSQ"}
+            else ""
+        )
         badges.append(f'<span class="recent-result{css_class}">{escape(value)}</span>')
     return (
         '<div class="recent-results"><span class="recent-label">Últimos 3</span>'
@@ -374,9 +423,7 @@ def team_identity_html(driver: pd.Series) -> str:
     if not re.fullmatch(r"[0-9A-Fa-f]{6}", team_colour):
         team_colour = "555B66"
 
-    number_value = pd.to_numeric(
-        pd.Series([driver.get("driver_number")]), errors="coerce"
-    ).iloc[0]
+    number_value = pd.to_numeric(pd.Series([driver.get("driver_number")]), errors="coerce").iloc[0]
     number = str(int(number_value)) if pd.notna(number_value) else "—"
 
     logo_dir = Path(__file__).resolve().parent / "assets" / "team_logos"
@@ -391,7 +438,7 @@ def team_identity_html(driver: pd.Series) -> str:
         initials = "".join(word[0] for word in team_name.split()[:2]).upper() or "F1"
         logo = (
             f'<span class="team-logo-fallback" style="background:#{team_colour};">'
-            f'{escape(initials)}</span>'
+            f"{escape(initials)}</span>"
         )
 
     return (
@@ -401,22 +448,24 @@ def team_identity_html(driver: pd.Series) -> str:
     )
 
 
-def championship_line(
-    standing: pd.Series | None, recent_results: list[str] | None = None
-) -> str:
+def championship_line(standing: pd.Series | None, recent_results: list[str] | None = None) -> str:
     """Formata pontos, posição e variação oficial após a corrida selecionada."""
     if standing is None or standing.empty:
-        return ('<div class="driver-championship"><div class="champ-title">Campeonato</div>'
-                '<div class="champ-main">Dados indisponíveis</div>'
-                f'{recent_results_html(recent_results)}</div>')
+        return (
+            '<div class="driver-championship"><div class="champ-title">Campeonato</div>'
+            '<div class="champ-main">Dados indisponíveis</div>'
+            f"{recent_results_html(recent_results)}</div>"
+        )
 
     points = pd.to_numeric(pd.Series([standing.get("points_current")]), errors="coerce").iloc[0]
     current = pd.to_numeric(pd.Series([standing.get("position_current")]), errors="coerce").iloc[0]
     start = pd.to_numeric(pd.Series([standing.get("position_start")]), errors="coerce").iloc[0]
     if pd.isna(points) or pd.isna(current):
-        return ('<div class="driver-championship"><div class="champ-title">Campeonato</div>'
-                '<div class="champ-main">Dados indisponíveis</div>'
-                f'{recent_results_html(recent_results)}</div>')
+        return (
+            '<div class="driver-championship"><div class="champ-title">Campeonato</div>'
+            '<div class="champ-main">Dados indisponíveis</div>'
+            f"{recent_results_html(recent_results)}</div>"
+        )
 
     points_label = f"{float(points):g} pts"
     if pd.isna(start):
@@ -442,7 +491,10 @@ def championship_line(
 
 
 def driver_card(
-    driver: pd.Series, role: str, color: str, standing: pd.Series | None = None,
+    driver: pd.Series,
+    role: str,
+    color: str,
+    standing: pd.Series | None = None,
     recent_results: list[str] | None = None,
 ) -> str:
     """Cartão compacto com cor, bandeira e foto oficial fornecida pela OpenF1."""
@@ -460,8 +512,8 @@ def driver_card(
         f'<div class="driver-card" style="border-left:4px solid {color};">'
         f'{image}<div class="driver-card-content"><div class="driver-card-main"><div class="driver-role">{escape(role)}</div>'
         f'<div class="driver-name" style="color:{color};">● {acronym}{flag}</div>'
-        f'<div>{full_name}</div>{team_identity_html(driver)}</div>'
-        f'{championship_line(standing, recent_results)}</div></div>'
+        f"<div>{full_name}</div>{team_identity_html(driver)}</div>"
+        f"{championship_line(standing, recent_results)}</div></div>"
     )
 
 
@@ -576,7 +628,8 @@ def driver_summary(
 
     driver_positions = (
         positions[positions["driver_number"] == number].sort_values("date")
-        if not positions.empty else pd.DataFrame()
+        if not positions.empty
+        else pd.DataFrame()
     )
     if not driver_positions.empty:
         pos_values = pd.to_numeric(driver_positions["position"], errors="coerce").dropna()
@@ -711,7 +764,7 @@ with header_title:
         '<div class="dashboard-header"><div class="brand">'
         '<div class="brand-badge">🏁</div>'
         '<div class="brand-name">F1 DATA ANALYTICS</div>'
-        '</div></div>',
+        "</div></div>",
         unsafe_allow_html=True,
     )
 with header_action:
@@ -815,9 +868,7 @@ def selected_driver_results(number: int) -> list[str]:
     driver_history = season_results[
         pd.to_numeric(season_results["driver_number"], errors="coerce").eq(number)
     ].copy()
-    driver_history["meeting_key"] = pd.to_numeric(
-        driver_history["meeting_key"], errors="coerce"
-    )
+    driver_history["meeting_key"] = pd.to_numeric(driver_history["meeting_key"], errors="coerce")
     rows = driver_history.merge(allowed, on="meeting_key", how="inner").sort_values("date_start")
     labels: list[str] = []
     for result in rows.tail(3).itertuples(index=False):
@@ -828,9 +879,18 @@ def selected_driver_results(number: int) -> list[str]:
         elif result_flag(getattr(result, "dnf", False)):
             labels.append("DNF")
         else:
-            position = pd.to_numeric(pd.Series([getattr(result, "position", None)]), errors="coerce").iloc[0]
-            labels.append("V" if pd.notna(position) and int(position) == 1 else f"P{int(position)}" if pd.notna(position) else "—")
+            position = pd.to_numeric(
+                pd.Series([getattr(result, "position", None)]), errors="coerce"
+            ).iloc[0]
+            labels.append(
+                "V"
+                if pd.notna(position) and int(position) == 1
+                else f"P{int(position)}"
+                if pd.notna(position)
+                else "—"
+            )
     return labels
+
 
 # A classificação oficial é vinculada à corrida do GP, mesmo que o usuário
 # esteja visualizando treino ou classificação. Uma única consulta traz todos
@@ -842,9 +902,7 @@ championship = (
     else pd.DataFrame()
 )
 championship_rows = (
-    championship.assign(
-        driver_number=pd.to_numeric(championship["driver_number"], errors="coerce")
-    )
+    championship.assign(driver_number=pd.to_numeric(championship["driver_number"], errors="coerce"))
     .dropna(subset=["driver_number"])
     .drop_duplicates("driver_number", keep="last")
     .set_index("driver_number")
@@ -863,16 +921,22 @@ identity_a, identity_b = st.columns(2, gap="large")
 with identity_a:
     st.markdown(
         driver_card(
-            driver_rows.loc[driver_a], "Piloto A", DRIVER_A_COLOR,
-            selected_standing(driver_a), selected_driver_results(driver_a),
+            driver_rows.loc[driver_a],
+            "Piloto A",
+            DRIVER_A_COLOR,
+            selected_standing(driver_a),
+            selected_driver_results(driver_a),
         ),
         unsafe_allow_html=True,
     )
 with identity_b:
     st.markdown(
         driver_card(
-            driver_rows.loc[driver_b], "Piloto B", DRIVER_B_COLOR,
-            selected_standing(driver_b), selected_driver_results(driver_b),
+            driver_rows.loc[driver_b],
+            "Piloto B",
+            DRIVER_B_COLOR,
+            selected_standing(driver_b),
+            selected_driver_results(driver_b),
         ),
         unsafe_allow_html=True,
     )
@@ -906,12 +970,8 @@ retirements = detect_retirements((driver_a, driver_b), laps, current_result)
 
 # --- Resumo comparativo: Piloto A | Circuito | Piloto B -----------------------------
 
-summary_a = driver_summary(
-    driver_a, car_data_a, valid_laps, pits, positions, current_result
-)
-summary_b = driver_summary(
-    driver_b, car_data_b, valid_laps, pits, positions, current_result
-)
+summary_a = driver_summary(driver_a, car_data_a, valid_laps, pits, positions, current_result)
+summary_b = driver_summary(driver_b, car_data_b, valid_laps, pits, positions, current_result)
 
 meeting_row = meetings.loc[meetings["meeting_key"] == meeting_key].iloc[0]
 circuit_name = str(
@@ -928,15 +988,18 @@ circuit_visual = (
     f'src="{circuit_image}" alt="Traçado de {escape(circuit_name)}"></div>'
     if circuit_image
     else '<div class="circuit-image-wrap"><div class="circuit-image-empty">'
-    'Traçado ainda não gerado</div></div>'
+    "Traçado ainda não gerado</div></div>"
 )
 
-latest_weather = weather.sort_values("date").iloc[-1] if not weather.empty else pd.Series(dtype=object)
+latest_weather = (
+    weather.sort_values("date").iloc[-1] if not weather.empty else pd.Series(dtype=object)
+)
 track_temp = latest_weather.get("track_temperature")
 air_temp = latest_weather.get("air_temperature")
 rain_detected = (
     bool(weather["rainfall"].fillna(False).astype(bool).any())
-    if not weather.empty and "rainfall" in weather.columns else None
+    if not weather.empty and "rainfall" in weather.columns
+    else None
 )
 total_laps = (
     int(pd.to_numeric(laps["lap_number"], errors="coerce").max())
@@ -974,22 +1037,22 @@ st.markdown(
     '<div class="comparison-summary">'
     '<div class="summary-column">'
     f'<div class="summary-title">Piloto A</div><div class="summary-name" style="color:{DRIVER_A_COLOR}">'
-    f'● {escape(driver_display(driver_a))}</div>{summary_rows(driver_items_a)}</div>'
+    f"● {escape(driver_display(driver_a))}</div>{summary_rows(driver_items_a)}</div>"
     '<div class="summary-column center">'
     f'<div class="summary-title">Circuito</div><div class="summary-name">{escape(circuit_name)}</div>'
     f'<div class="summary-note">{escape(country_name)}</div>{circuit_visual}{summary_rows(circuit_items)}'
     '<div class="summary-note">Recordes vêm de catálogo próprio; dados da sessão vêm da OpenF1.</div></div>'
     '<div class="summary-column">'
     f'<div class="summary-title">Piloto B</div><div class="summary-name" style="color:{DRIVER_B_COLOR}">'
-    f'● {escape(driver_display(driver_b))}</div>{summary_rows(driver_items_b)}</div>'
-    '</div>',
+    f"● {escape(driver_display(driver_b))}</div>{summary_rows(driver_items_b)}</div>"
+    "</div>",
     unsafe_allow_html=True,
 )
 
 if retirements:
     retirement_items = " &nbsp; | &nbsp; ".join(
         f'<span style="color:{driver_colors[number]};font-weight:800;">'
-        f'{driver_label(number)}</span> abandonou na volta '
+        f"{driver_label(number)}</span> abandonou na volta "
         f'<strong style="color:#EF4444;">{lap_number}</strong>'
         for number, lap_number in retirements.items()
     )
@@ -997,7 +1060,7 @@ if retirements:
         '<div style="background:rgba(239,68,68,.10);border:1px solid #EF4444;'
         'border-radius:10px;padding:10px 14px;margin-bottom:14px;">'
         f'<span style="color:#EF4444;font-weight:800;">⚠ ABANDONO</span>'
-        f' &nbsp; {retirement_items}</div>',
+        f" &nbsp; {retirement_items}</div>",
         unsafe_allow_html=True,
     )
 
@@ -1065,25 +1128,25 @@ with left:
                     )
 
             for number, driver_last_lap in retirements.items():
-                    fig.add_vline(
-                        x=driver_last_lap,
-                        line_width=2,
-                        line_dash="dash",
-                        line_color="#EF4444",
-                    )
-                    fig.add_annotation(
-                        x=driver_last_lap,
-                        y=1,
-                        yref="paper",
-                        text=f"Abandono · {driver_label(number)} · V{driver_last_lap}",
-                        showarrow=False,
-                        xanchor="left",
-                        yanchor="bottom",
-                        font=dict(color="#EF4444", size=11),
-                        bgcolor="rgba(18, 22, 28, 0.88)",
-                        bordercolor="#EF4444",
-                        borderpad=4,
-                    )
+                fig.add_vline(
+                    x=driver_last_lap,
+                    line_width=2,
+                    line_dash="dash",
+                    line_color="#EF4444",
+                )
+                fig.add_annotation(
+                    x=driver_last_lap,
+                    y=1,
+                    yref="paper",
+                    text=f"Abandono · {driver_label(number)} · V{driver_last_lap}",
+                    showarrow=False,
+                    xanchor="left",
+                    yanchor="bottom",
+                    font=dict(color="#EF4444", size=11),
+                    bgcolor="rgba(18, 22, 28, 0.88)",
+                    bordercolor="#EF4444",
+                    borderpad=4,
+                )
 
             # Escala comparável em qualquer seleção: sempre da P1 à P20.
             fig.update_yaxes(
@@ -1101,9 +1164,7 @@ with left:
                 tick0=5,
                 dtick=5,
             )
-            st.plotly_chart(
-                chart_style(fig, "Posição por volta", height=300), width="stretch"
-            )
+            st.plotly_chart(chart_style(fig, "Posição por volta", height=300), width="stretch")
         else:
             st.info("Sem dados de posição por volta para os pilotos selecionados.")
     else:
@@ -1155,9 +1216,7 @@ with right:
             ticktext=pace_labels,
         )
         fig.update_xaxes(title="Volta", dtick=5)
-        st.plotly_chart(
-            chart_style(fig, "Ritmo de corrida", height=300), width="stretch"
-        )
+        st.plotly_chart(chart_style(fig, "Ritmo de corrida", height=300), width="stretch")
 
         summary_cols = st.columns(2)
         for col, number in zip(summary_cols, (driver_a, driver_b), strict=True):
@@ -1181,9 +1240,9 @@ with col_strategy:
     st.markdown(
         '<div class="lower-panel-heading"><div class="panel-title">Estratégia de pneus</div>'
         f'<span style="color:{DRIVER_A_COLOR};font-weight:800;">● '
-        f'{escape(driver_display(driver_a))}</span> &nbsp;&nbsp; '
+        f"{escape(driver_display(driver_a))}</span> &nbsp;&nbsp; "
         f'<span style="color:{DRIVER_B_COLOR};font-weight:800;">● '
-        f'{escape(driver_display(driver_b))}</span></div>',
+        f"{escape(driver_display(driver_b))}</span></div>",
         unsafe_allow_html=True,
     )
     if not stints.empty:
@@ -1240,9 +1299,7 @@ with col_strategy:
                 f'<span style="color:{DRIVER_B_COLOR}">●</span> {tyre_driver_labels[1]}',
             ],
         )
-        st.plotly_chart(
-            chart_style(fig, "", height=238, show_legend=True), width="stretch"
-        )
+        st.plotly_chart(chart_style(fig, "", height=238, show_legend=True), width="stretch")
     else:
         st.info("Sem dados de stints para esta sessão.")
 
@@ -1250,11 +1307,11 @@ with col_sectors:
     st.markdown(
         '<div class="lower-panel-heading"><div class="panel-title">Comparação de setores</div>'
         f'<span style="color:{DRIVER_A_COLOR};font-weight:800;">● '
-        f'{escape(driver_display(driver_a))}</span> &nbsp;&nbsp; '
+        f"{escape(driver_display(driver_a))}</span> &nbsp;&nbsp; "
         f'<span style="color:{DRIVER_B_COLOR};font-weight:800;">● '
-        f'{escape(driver_display(driver_b))}</span>'
+        f"{escape(driver_display(driver_b))}</span>"
         f'<div class="panel-caption">Diferença de tempo (s) — '
-        f'{escape(driver_label(driver_a))} vs {escape(driver_label(driver_b))}</div></div>',
+        f"{escape(driver_label(driver_a))} vs {escape(driver_label(driver_b))}</div></div>",
         unsafe_allow_html=True,
     )
     if not pair_laps.empty:
@@ -1315,14 +1372,18 @@ with col_sectors:
 # --- Mapa de desempenho na temporada -------------------------------------------------
 
 st.write("")
-st.markdown('<div class="panel-title">Desempenho dos pilotos no campeonato</div>', unsafe_allow_html=True)
+st.markdown(
+    '<div class="panel-title">Desempenho dos pilotos no campeonato</div>', unsafe_allow_html=True
+)
 st.caption(
     "Cada quadrado é o resultado de uma corrida. A coluna contornada em amarelo "
     "corresponde ao Grande Prêmio selecionado."
 )
 
 if not season_results.empty and not season_meetings.empty:
-    completed_keys = set(pd.to_numeric(season_results["meeting_key"], errors="coerce").dropna().astype(int))
+    completed_keys = set(
+        pd.to_numeric(season_results["meeting_key"], errors="coerce").dropna().astype(int)
+    )
     race_calendar = season_meetings[
         season_meetings["meeting_key"].astype(int).isin(completed_keys)
     ].copy()
@@ -1337,14 +1398,14 @@ if not season_results.empty and not season_meetings.empty:
             short_name = str(getattr(meeting, "country_name", "GP"))[:3].upper()
         header_cells.append(
             f'<th class="{selected_class.strip()}" title="{escape(str(meeting.meeting_name))}">'
-            f'{escape(short_name)}</th>'
+            f"{escape(short_name)}</th>"
         )
 
     body_rows = []
     for number, color in ((driver_a, DRIVER_A_COLOR), (driver_b, DRIVER_B_COLOR)):
         cells = [
             f'<td class="driver-cell"><span style="color:{color};font-weight:900;">'
-            f'● {escape(driver_label(number))}</span></td>'
+            f"● {escape(driver_label(number))}</span></td>"
         ]
         driver_results = season_results[
             pd.to_numeric(season_results["driver_number"], errors="coerce").eq(number)
@@ -1367,7 +1428,9 @@ if not season_results.empty and not season_meetings.empty:
                 elif result_flag(result.get("dnf", False)):
                     status = "DNF"
                 else:
-                    position = pd.to_numeric(pd.Series([result.get("position")]), errors="coerce").iloc[0]
+                    position = pd.to_numeric(
+                        pd.Series([result.get("position")]), errors="coerce"
+                    ).iloc[0]
                     status = f"P{int(position)}" if pd.notna(position) else "—"
                 laps_done = result.get("number_of_laps")
 
@@ -1388,7 +1451,7 @@ if not season_results.empty and not season_meetings.empty:
         + "".join(body_rows)
         + "</tbody></table>"
         + '<div class="season-legend">P1–P3: pódio · P4–P6: destaque · '
-        + 'P7–P10: pontos · DNF/DNS/DSQ: corrida não concluída</div></div>'
+        + "P7–P10: pontos · DNF/DNS/DSQ: corrida não concluída</div></div>"
     )
     st.markdown(season_grid_html, unsafe_allow_html=True)
 else:
