@@ -1,0 +1,35 @@
+site_name: F1 Project
+site_description: Pipeline de engenharia de dados para a OpenF1 API
+repo_url: https://github.com/PRMarques/F1_project
+
+theme:
+  name: material
+  palette:
+    - scheme: default
+      primary: red
+      toggle:
+        icon: material/brightness-7
+        name: Modo escuro
+    - scheme: slate
+      primary: red
+      toggle:
+        icon: material/brightness-4
+        name: Modo claro
+  features:
+    - navigation.sections
+    - content.code.copy
+
+nav:
+  - Visão geral: index.md
+  - Arquitetura: arquitetura.md
+  - Estrutura do projeto: project-structure.md
+  - Execução: execucao.md
+  - Rodando localmente: running-local.md
+  - Rodando os testes: running-tests.md
+  - Contribuindo: contributing.md
+  - Glossário de siglas: glossario.md
+
+markdown_extensions:
+  - admonition
+  - pymdownx.superfences
+  - pymdownx.highlight

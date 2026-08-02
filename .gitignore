@@ -1,0 +1,41 @@
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.eggs/
+
+# Virtualenv
+.venv/
+
+# Environment
+.env
+
+# Poetry
+dist/
+
+# Data (Bronze/Silver/Gold/Rejected) — manter apenas estrutura via .gitkeep
+data/raw/*
+data/interim/*
+data/processed/*
+data/rejected/*
+!data/raw/.gitkeep
+!data/interim/.gitkeep
+!data/processed/.gitkeep
+!data/rejected/.gitkeep
+
+# Testes e cobertura
+.pytest_cache/
+.coverage
+htmlcov/
+.ruff_cache/
+
+# MkDocs
+site/
+
+# Cache do FastF1
+.fastf1-cache/
+
+# Editores/OS
+.vscode/
+.idea/
+.DS_Store
