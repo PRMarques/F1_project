@@ -82,9 +82,16 @@ st.markdown(
     }}
     .summary-title {{font-size:.82rem; color:{MUTED}; text-transform:uppercase; font-weight:800;}}
     .summary-name {{font-size:1.08rem; font-weight:900; margin:3px 0 9px;}}
-    .circuit-image-wrap {{height:112px; display:flex; align-items:center; justify-content:center; margin:5px 0 8px;}}
-    .circuit-image {{max-width:210px; max-height:108px; width:100%; height:100%; object-fit:contain;}}
-    .circuit-image-empty {{color:{MUTED}; font-size:.72rem; border:1px dashed {BORDER}; border-radius:10px; padding:18px 24px;}}
+    .circuit-image-wrap {{
+        height:112px; display:flex; align-items:center; justify-content:center; margin:5px 0 8px;
+    }}
+    .circuit-image {{
+        max-width:210px; max-height:108px; width:100%; height:100%; object-fit:contain;
+    }}
+    .circuit-image-empty {{
+        color:{MUTED}; font-size:.72rem; border:1px dashed {BORDER};
+        border-radius:10px; padding:18px 24px;
+    }}
     .summary-row {{
         display:flex; align-items:baseline; justify-content:space-between; gap:12px;
         padding:6px 0; border-top:1px solid rgba(39,45,55,.72);
@@ -133,16 +140,23 @@ st.markdown(
         width:25px; height:25px; border-radius:6px; display:inline-flex;
         align-items:center; justify-content:center; color:#fff; font-size:.61rem; font-weight:900;
     }}
-    .team-name {{font-size:.72rem; font-weight:700; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;}}
+    .team-name {{
+        font-size:.72rem; font-weight:700; white-space:nowrap;
+        overflow:hidden; text-overflow:ellipsis;
+    }}
     .driver-card-main {{min-width:0; flex:1;}}
     .driver-championship {{
         min-width:235px; margin-left:auto; padding:8px 12px;
         border-left:1px solid {BORDER}; text-align:right;
     }}
-    .champ-title {{color:{MUTED}; font-size:.64rem; text-transform:uppercase; letter-spacing:.06em;}}
+    .champ-title {{
+        color:{MUTED}; font-size:.64rem; text-transform:uppercase; letter-spacing:.06em;
+    }}
     .champ-main {{font-size:.92rem; font-weight:900; margin-top:2px; white-space:nowrap;}}
     .champ-change {{font-size:.68rem; margin-top:2px; white-space:nowrap;}}
-    .recent-results {{display:flex; justify-content:flex-end; align-items:center; gap:5px; margin-top:6px;}}
+    .recent-results {{
+        display:flex; justify-content:flex-end; align-items:center; gap:5px; margin-top:6px;
+    }}
     .recent-label {{color:{MUTED}; font-size:.62rem; margin-right:2px;}}
     .recent-result {{
         min-width:25px; padding:3px 6px; border-radius:6px; text-align:center;
@@ -194,7 +208,10 @@ st.markdown(
         .brand-name {{font-size: 1.65rem;}}
         .brand-badge {{width: 46px; height: 46px; min-width: 46px;}}
         .comparison-summary {{grid-template-columns:1fr;}}
-        .summary-column.center {{border:0; border-top:1px solid {BORDER}; border-bottom:1px solid {BORDER}; padding:12px 14px;}}
+        .summary-column.center {{
+            border:0; border-top:1px solid {BORDER}; border-bottom:1px solid {BORDER};
+            padding:12px 14px;
+        }}
     }}
     </style>
     """,
@@ -397,7 +414,10 @@ def recent_results_html(results: list[str] | None) -> str:
     """Exibe as três corridas mais recentes até o GP selecionado."""
     values = (results or [])[-3:]
     if not values:
-        return '<div class="recent-results"><span class="recent-label">Últimos 3</span><span class="recent-result">—</span></div>'
+        return (
+            '<div class="recent-results"><span class="recent-label">Últimos 3</span>'
+            '<span class="recent-result">—</span></div>'
+        )
 
     badges = []
     for value in values:
@@ -510,7 +530,8 @@ def driver_card(
     )
     return (
         f'<div class="driver-card" style="border-left:4px solid {color};">'
-        f'{image}<div class="driver-card-content"><div class="driver-card-main"><div class="driver-role">{escape(role)}</div>'
+        f'{image}<div class="driver-card-content"><div class="driver-card-main">'
+        f'<div class="driver-role">{escape(role)}</div>'
         f'<div class="driver-name" style="color:{color};">● {acronym}{flag}</div>'
         f"<div>{full_name}</div>{team_identity_html(driver)}</div>"
         f"{championship_line(standing, recent_results)}</div></div>"
@@ -1036,14 +1057,19 @@ circuit_items = [
 st.markdown(
     '<div class="comparison-summary">'
     '<div class="summary-column">'
-    f'<div class="summary-title">Piloto A</div><div class="summary-name" style="color:{DRIVER_A_COLOR}">'
+    f'<div class="summary-title">Piloto A</div>'
+    f'<div class="summary-name" style="color:{DRIVER_A_COLOR}">'
     f"● {escape(driver_display(driver_a))}</div>{summary_rows(driver_items_a)}</div>"
     '<div class="summary-column center">'
-    f'<div class="summary-title">Circuito</div><div class="summary-name">{escape(circuit_name)}</div>'
-    f'<div class="summary-note">{escape(country_name)}</div>{circuit_visual}{summary_rows(circuit_items)}'
-    '<div class="summary-note">Recordes vêm de catálogo próprio; dados da sessão vêm da OpenF1.</div></div>'
+    f'<div class="summary-title">Circuito</div>'
+    f'<div class="summary-name">{escape(circuit_name)}</div>'
+    f'<div class="summary-note">{escape(country_name)}</div>'
+    f"{circuit_visual}{summary_rows(circuit_items)}"
+    '<div class="summary-note">Recordes vêm de catálogo próprio; '
+    "dados da sessão vêm da OpenF1.</div></div>"
     '<div class="summary-column">'
-    f'<div class="summary-title">Piloto B</div><div class="summary-name" style="color:{DRIVER_B_COLOR}">'
+    f'<div class="summary-title">Piloto B</div>'
+    f'<div class="summary-name" style="color:{DRIVER_B_COLOR}">'
     f"● {escape(driver_display(driver_b))}</div>{summary_rows(driver_items_b)}</div>"
     "</div>",
     unsafe_allow_html=True,
@@ -1438,8 +1464,9 @@ if not season_results.empty and not season_meetings.empty:
             tooltip = status
             if status == "DNF" and pd.notna(laps_done):
                 tooltip = f"DNF · {int(laps_done)} voltas completadas"
+            cell_style = result_cell_style(position, status)
             cells.append(
-                f'<td class="result-cell{selected_class}" style="{result_cell_style(position, status)}" '
+                f'<td class="result-cell{selected_class}" style="{cell_style}" '
                 f'title="{escape(tooltip)}">{status}</td>'
             )
         body_rows.append("<tr>" + "".join(cells) + "</tr>")
