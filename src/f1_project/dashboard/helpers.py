@@ -314,6 +314,22 @@ def team_logo_html(driver: pd.Series) -> str:
     )
 
 
+def team_car_html(driver: pd.Series, year: int) -> str:
+    """Imagem do carro da equipe na temporada selecionada; vazia se não houver PNG local."""
+    team_name = str(driver.get("team_name") or "").strip()
+    car_dir = Path(__file__).resolve().parent / "assets" / "Cars" / str(year)
+    car_path = car_dir / f"{asset_slug(team_name)}.png"
+    if not car_path.is_file():
+        return ""
+
+    encoded = base64.b64encode(car_path.read_bytes()).decode("ascii")
+    return (
+        '<div class="driver-car-wrap">'
+        f'<img class="driver-car" src="data:image/png;base64,{encoded}" '
+        f'alt="Carro {escape(team_name, quote=True)}"></div>'
+    )
+
+
 def championship_line(standing: pd.Series | None, recent_results: list[str] | None = None) -> str:
     """Formata pontos, posição e variação oficial após a corrida selecionada."""
     if standing is None or standing.empty:

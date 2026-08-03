@@ -41,6 +41,7 @@ from f1_project.dashboard.helpers import (
     season_race_results,
     seconds_to_lap,
     summary_rows,
+    team_car_html,
 )
 
 st.set_page_config(page_title="F1 Data Analytics", page_icon="🏁", layout="wide")
@@ -79,7 +80,11 @@ st.markdown(
         background:{PANEL}; border:1px solid {BORDER}; border-radius:14px;
         padding:14px; margin:0 0 16px;
     }}
-    .summary-column {{padding:3px 14px;}}
+    .summary-column {{padding:3px 14px; display:flex; flex-direction:column;}}
+    .driver-car-wrap {{
+        margin-top:auto; padding-top:10px; display:flex; align-items:center; justify-content:center;
+    }}
+    .driver-car {{max-width:100%; max-height:180px; width:auto; object-fit:contain;}}
     .summary-column.center {{
         border-left:1px solid {BORDER}; border-right:1px solid {BORDER};
         text-align:center;
@@ -511,12 +516,16 @@ circuit_items = [
     ("Recordista", f"{record_driver} · {record_year}" if record_driver != "—" else "—"),
 ]
 
+car_a_visual = team_car_html(driver_rows.loc[driver_a], year)
+car_b_visual = team_car_html(driver_rows.loc[driver_b], year)
+
 st.markdown(
     '<div class="comparison-summary">'
     '<div class="summary-column">'
     f'<div class="summary-title">Piloto A</div>'
     f'<div class="summary-name" style="color:{DRIVER_A_COLOR}">'
-    f"● {escape(driver_display(driver_a))}</div>{summary_rows(driver_items_a)}</div>"
+    f"● {escape(driver_display(driver_a))}</div>{summary_rows(driver_items_a)}"
+    f"{car_a_visual}</div>"
     '<div class="summary-column center">'
     f'<div class="summary-title">Circuito</div>'
     f'<div class="summary-name">{escape(circuit_name)}</div>'
@@ -527,7 +536,8 @@ st.markdown(
     '<div class="summary-column">'
     f'<div class="summary-title">Piloto B</div>'
     f'<div class="summary-name" style="color:{DRIVER_B_COLOR}">'
-    f"● {escape(driver_display(driver_b))}</div>{summary_rows(driver_items_b)}</div>"
+    f"● {escape(driver_display(driver_b))}</div>{summary_rows(driver_items_b)}"
+    f"{car_b_visual}</div>"
     "</div>",
     unsafe_allow_html=True,
 )
