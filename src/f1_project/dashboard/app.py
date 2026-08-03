@@ -28,6 +28,7 @@ from f1_project.dashboard.helpers import (
     TEXT,
     api_get,
     best_sector_times,
+    brand_logo_html,
     chart_style,
     circuit_image_data,
     default_meeting_index,
@@ -107,19 +108,21 @@ st.markdown(
     .dashboard-header {{margin: 0 0 8px;}}
     .brand {{display: flex; align-items: center; gap: 16px; min-height: 58px;}}
     .brand-badge {{
-        width: 52px; height: 52px; min-width: 52px; border-radius: 50%; background: {ACCENT};
-        display: flex; align-items: center; justify-content: center; font-size: 23px;
+        height: 52px; width: auto; min-width: 52px; max-width: 90px; object-fit: contain;
     }}
     .brand-name {{font-size: 2.03rem; font-weight: 900; letter-spacing: -0.035em; line-height: 1;}}
     .filters-row {{margin-top: 2px; margin-bottom: 4px;}}
     .updated-at {{color: {MUTED}; font-size: 0.8rem; text-align: right;}}
     .driver-card {{
-        min-height: 76px; background: {PANEL}; border: 1px solid {BORDER};
+        background: {PANEL}; border: 1px solid {BORDER};
         border-radius: 12px; padding: 9px 14px; display: flex; align-items: center;
         gap: 12px; overflow: hidden;
     }}
     .driver-card-content {{min-width:0; flex:1; display:flex; align-items:center; gap:14px;}}
-    .driver-headshot {{height: 64px; width: 64px; object-fit: contain;}}
+    .driver-identity {{display:flex; flex-direction:column; align-items:center; gap:4px;}}
+    .driver-acronym {{font-size:1rem; font-weight:800; line-height:1.2;}}
+    .driver-image-row {{display:flex; align-items:center; gap:10px;}}
+    .driver-headshot {{height: 100px; width: 100px; object-fit: contain;}}
     .driver-flag {{
         display:inline-flex; align-items:center; margin-left:7px;
         vertical-align:-3px;
@@ -134,9 +137,9 @@ st.markdown(
     }}
     .driver-role {{color: {MUTED}; font-size: .72rem; text-transform: uppercase;}}
     .driver-name {{font-size: 1rem; font-weight: 800; line-height: 1.2;}}
-    .driver-fullname {{display:flex; align-items:center; gap:8px; margin-top:5px;}}
+    .driver-fullname {{font-size:30px; font-weight:900; line-height:1.2; text-align:center; white-space:nowrap;}}
     .driver-number {{font-size:1rem; font-weight:800; line-height:1.2;}}
-    .team-logo {{height:24px; width:auto; max-width:130px; object-fit:contain;}}
+    .team-logo {{height:76px; width:auto; max-width:115px; object-fit:contain;}}
     .team-logo-fallback {{
         width:25px; height:25px; border-radius:6px; display:inline-flex;
         align-items:center; justify-content:center; color:#fff; font-size:.61rem; font-weight:900;
@@ -203,7 +206,7 @@ st.markdown(
     @media (max-width: 1100px) {{
         .block-container {{padding-top: 4.25rem; padding-left: 1rem; padding-right: 1rem;}}
         .brand-name {{font-size: 1.65rem;}}
-        .brand-badge {{width: 46px; height: 46px; min-width: 46px;}}
+        .brand-badge {{height: 46px; min-width: 46px; max-width: 78px;}}
         .comparison-summary {{grid-template-columns:1fr;}}
         .summary-column.center {{
             border:0; border-top:1px solid {BORDER}; border-bottom:1px solid {BORDER};
@@ -234,7 +237,7 @@ header_title, header_action = st.columns([6.2, 0.8], gap="small")
 with header_title:
     st.markdown(
         '<div class="dashboard-header"><div class="brand">'
-        '<div class="brand-badge">🏁</div>'
+        f"{brand_logo_html()}"
         '<div class="brand-name">F1 DATA ANALYTICS</div>'
         "</div></div>",
         unsafe_allow_html=True,
