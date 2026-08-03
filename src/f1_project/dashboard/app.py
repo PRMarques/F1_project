@@ -120,8 +120,9 @@ st.markdown(
     }}
     .driver-card-content {{min-width:0; flex:1; display:flex; align-items:center; gap:14px;}}
     .driver-identity {{display:flex; flex-direction:column; align-items:center; gap:4px;}}
+    .driver-image-row {{display:flex; align-items:flex-end; gap:10px;}}
+    .driver-team-col {{display:flex; flex-direction:column; align-items:center; gap:2px;}}
     .driver-acronym {{font-size:1rem; font-weight:800; line-height:1.2;}}
-    .driver-image-row {{display:flex; align-items:center; gap:10px;}}
     .driver-headshot {{height: 100px; width: 100px; object-fit: contain;}}
     .driver-flag {{
         display:inline-flex; align-items:center; margin-left:7px;
@@ -143,7 +144,6 @@ st.markdown(
         width:25px; height:25px; border-radius:6px; display:inline-flex;
         align-items:center; justify-content:center; color:#fff; font-size:.61rem; font-weight:900;
     }}
-    .driver-card-main {{min-width:0; flex:1;}}
     .driver-championship {{
         min-width:235px; margin-left:auto; padding:8px 12px;
         border-left:1px solid {BORDER}; text-align:right;
