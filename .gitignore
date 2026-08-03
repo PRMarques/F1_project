@@ -39,3 +39,7 @@ site/
 .vscode/
 .idea/
 .DS_Store
+
+# Claude Code (config local, específica de cada sessão)
+.claude/settings.json
+.claude/settings.local.json
