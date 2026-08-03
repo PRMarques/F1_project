@@ -172,25 +172,22 @@ def test_recent_results_html_marks_wins_and_dnf() -> None:
     assert ">V<" in html
 
 
-# --- team_identity_html -----------------------------------------------------------------
+# --- team_logo_html ----------------------------------------------------------------------
 
 
-def test_team_identity_html_uses_initials_fallback_when_no_logo() -> None:
-    driver = pd.Series(
-        {"team_name": "Red Bull Racing", "team_colour": "3671C6", "driver_number": 1}
-    )
+def test_team_logo_html_uses_initials_fallback_when_no_logo() -> None:
+    driver = pd.Series({"team_name": "Equipe Sem Logo", "team_colour": "3671C6"})
 
-    html = helpers.team_identity_html(driver)
+    html = helpers.team_logo_html(driver)
 
-    assert "#1" in html
     assert "background:#3671C6" in html
-    assert "RB" in html
+    assert "ES" in html
 
 
-def test_team_identity_html_falls_back_to_default_colour_on_invalid_hex() -> None:
-    driver = pd.Series({"team_name": "Equipe X", "team_colour": "not-a-color", "driver_number": 44})
+def test_team_logo_html_falls_back_to_default_colour_on_invalid_hex() -> None:
+    driver = pd.Series({"team_name": "Equipe X", "team_colour": "not-a-color"})
 
-    html = helpers.team_identity_html(driver)
+    html = helpers.team_logo_html(driver)
 
     assert "background:#555B66" in html
 
@@ -252,6 +249,26 @@ def test_driver_card_renders_role_and_name() -> None:
     assert "Piloto A" in html
     assert "Max Verstappen" in html
     assert "VER" in html
+    assert 'class="driver-number">#1<' in html
+
+
+def test_driver_card_falls_back_to_series_index_when_driver_number_column_missing() -> None:
+    """driver_rows usa driver_number como índice do Series, não como coluna."""
+    driver = pd.Series(
+        {
+            "full_name": "Lando Norris",
+            "name_acronym": "NOR",
+            "country_code": "GBR",
+            "headshot_url": None,
+            "team_name": "McLaren",
+            "team_colour": "FF8000",
+        },
+        name=4,
+    )
+
+    html = helpers.driver_card(driver, "Piloto A", helpers.DRIVER_A_COLOR)
+
+    assert 'class="driver-number">#4<' in html
 
 
 # --- stat_card -----------------------------------------------------------------------
