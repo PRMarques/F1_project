@@ -136,8 +136,7 @@ st.markdown(
         color:{MUTED}; font-size:.68rem; font-weight:700; letter-spacing:.03em;
     }}
     .driver-role {{color: {MUTED}; font-size: .72rem; text-transform: uppercase;}}
-    .driver-name {{font-size: 1rem; font-weight: 800; line-height: 1.2;}}
-    .driver-fullname {{font-size:30px; font-weight:900; line-height:1.2; text-align:center; white-space:nowrap;}}
+    .driver-fullname {{font-size:27px; font-weight:900; line-height:1.2; text-align:center; white-space:nowrap;}}
     .driver-number {{font-size:1rem; font-weight:800; line-height:1.2;}}
     .team-logo {{height:76px; width:auto; max-width:115px; object-fit:contain;}}
     .team-logo-fallback {{

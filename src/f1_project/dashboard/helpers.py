@@ -382,13 +382,12 @@ def driver_card(
     return (
         f'<div class="driver-card" style="border-left:4px solid {color};">'
         '<div class="driver-identity">'
-        f'<div class="driver-acronym" style="color:{color};">{acronym}{flag}</div>'
+        f'<div class="driver-acronym" style="color:{color};">'
+        f'<span class="driver-number">#{escape(number)}</span> ● {acronym}{flag}</div>'
         f'<div class="driver-image-row">{image}{team_logo_html(driver)}</div>'
         f'<div class="driver-fullname">{full_name}</div></div>'
         f'<div class="driver-card-content"><div class="driver-card-main">'
-        f'<div class="driver-role">{escape(role)}</div>'
-        f'<div class="driver-name" style="color:{color};">'
-        f'<span class="driver-number">#{escape(number)}</span></div></div>'
+        f'<div class="driver-role">{escape(role)}</div></div>'
         f"{championship_line(standing, recent_results)}</div></div>"
     )
 
