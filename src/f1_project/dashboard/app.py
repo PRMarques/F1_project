@@ -135,7 +135,7 @@ st.markdown(
     .driver-flag-fallback {{
         color:{MUTED}; font-size:.68rem; font-weight:700; letter-spacing:.03em;
     }}
-    .driver-role {{color: {MUTED}; font-size: .72rem; text-transform: uppercase;}}
+    .driver-role {{color: {MUTED}; font-size: .72rem; text-transform: uppercase; margin-top:15px;}}
     .driver-fullname {{
         font-size:27px; font-weight:900; line-height:1.2; text-align:center; white-space:nowrap;
     }}
