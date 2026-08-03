@@ -120,7 +120,7 @@ st.markdown(
     .driver-card-content {{min-width:0; flex:1; display:flex; align-items:center; gap:14px;}}
     .driver-identity {{display:flex; flex-direction:column; align-items:center; gap:4px;}}
     .driver-image-row {{display:flex; align-items:flex-end; gap:10px;}}
-    .driver-team-col {{display:flex; flex-direction:column; align-items:center; gap:2px;}}
+    .driver-team-col {{display:flex; flex-direction:column; align-items:flex-start; gap:2px;}}
     .driver-acronym {{font-size:1rem; font-weight:800; line-height:1.2;}}
     .driver-headshot {{height: 100px; width: 100px; object-fit: contain;}}
     .driver-flag {{
