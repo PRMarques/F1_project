@@ -168,6 +168,66 @@ def test_run_skips_year_on_client_error_and_continues(
 
 
 @respx.mock
+def test_run_with_numeric_session_key_still_ingests_laps_and_session_result(
+    tmp_path: object, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    """`session_key` chega tipado (int) do OpenF1; passar um `int` explícito não pode
+    quebrar a comparação com `race_session_keys` (regressão: comparar int com str nunca
+    dava match, então laps/session_result eram sempre pulados quando --session-key era
+    informado)."""
+    _patch_data_dirs(tmp_path, monkeypatch)
+
+    respx.get(f"{BASE_URL}meetings").mock(
+        return_value=httpx.Response(200, json=[{"meeting_key": 1219, "year": 2024}])
+    )
+    respx.get(f"{BASE_URL}sessions").mock(
+        return_value=httpx.Response(
+            200, json=[{"session_key": 9222, "meeting_key": 1219, "session_name": "Race"}]
+        )
+    )
+    respx.get(f"{BASE_URL}drivers").mock(
+        return_value=httpx.Response(
+            200, json=[{"session_key": 9222, "driver_number": 1, "full_name": "Max Verstappen"}]
+        )
+    )
+    respx.get(f"{BASE_URL}laps").mock(
+        return_value=httpx.Response(
+            200,
+            json=[{"session_key": 9222, "driver_number": 1, "lap_number": 1, "lap_duration": 91.5}],
+        )
+    )
+    respx.get(f"{BASE_URL}session_result").mock(
+        return_value=httpx.Response(
+            200, json=[{"session_key": 9222, "driver_number": 1, "position": 1}]
+        )
+    )
+
+    pipeline.run(years=[2024], session_key=9222)
+
+    assert (tmp_path / "raw" / "laps" / "9222.json").exists()
+    assert (tmp_path / "raw" / "session_result" / "9222.json").exists()
+
+
+def test_parse_session_key_converts_digits_to_int() -> None:
+    assert pipeline._parse_session_key("9222") == 9222
+    assert isinstance(pipeline._parse_session_key("9222"), int)
+
+
+def test_parse_session_key_keeps_latest_keyword_as_string() -> None:
+    assert pipeline._parse_session_key("latest") == "latest"
+
+
+def test_main_parses_numeric_session_key_argument(monkeypatch: pytest.MonkeyPatch) -> None:
+    captured: dict[str, object] = {}
+    monkeypatch.setattr(pipeline, "run", lambda **kwargs: captured.update(kwargs) or None)
+
+    pipeline.main(["--years", "2024", "--session-key", "9222"])
+
+    assert captured["session_key"] == 9222
+    assert isinstance(captured["session_key"], int)
+
+
+@respx.mock
 def test_run_routes_invalid_records_to_rejected(
     tmp_path: object, monkeypatch: pytest.MonkeyPatch
 ) -> None:

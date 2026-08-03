@@ -32,6 +32,16 @@ from f1_project.validation.validate import validate_records
 logger = logging.getLogger(__name__)
 
 RACE_SESSION_NAME = "Race"
+LATEST_SESSION_KEYWORD = "latest"
+
+
+def _parse_session_key(value: str) -> int | str:
+    """Converte `--session-key` para `int` (a OpenF1 usa `session_key` numérico), exceto
+    pela keyword `latest`, que é repassada como string para a API resolver a sessão atual.
+    """
+    if value == LATEST_SESSION_KEYWORD:
+        return value
+    return int(value)
 
 
 def _ingest_entity(
@@ -59,7 +69,7 @@ def _ingest_year(
     client: OpenF1Client,
     year: int,
     country_name: str | None,
-    session_key: str | None,
+    session_key: int | str | None,
 ) -> None:
     reference_filters = {"year": year}
     if country_name is not None:
@@ -86,7 +96,7 @@ def _ingest_year(
         **reference_filters,
     )
 
-    session_keys: list[str | int] = (
+    session_keys: list[int | str] = (
         [session_key] if session_key is not None else [s.session_key for s in sessions]
     )
     race_session_keys = {s.session_key for s in sessions if s.session_name == RACE_SESSION_NAME}
@@ -131,7 +141,7 @@ def _ingest_year(
 def run(
     years: Sequence[int],
     country_name: str | None = None,
-    session_key: str | None = None,
+    session_key: int | str | None = None,
 ) -> None:
     """Ingesta meetings/sessions/drivers de cada ano em `years`, mais laps/session_result
     das sessões de corrida, e recalcula as tabelas Gold ao final.
@@ -168,7 +178,7 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument("--country-name", type=str, default=None, help="Filtra por país")
     parser.add_argument(
         "--session-key",
-        type=str,
+        type=_parse_session_key,
         default=None,
         help="Restringe a ingestão a uma sessão específica (aceita 'latest')",
     )
