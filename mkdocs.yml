@@ -22,6 +22,7 @@ theme:
 nav:
   - Visão geral: index.md
   - Arquitetura: arquitetura.md
+  - Tecnologias: tecnologias.md
   - Estrutura do projeto: project-structure.md
   - Execução: execucao.md
   - Rodando localmente: running-local.md
