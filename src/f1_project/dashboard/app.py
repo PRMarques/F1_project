@@ -118,11 +118,11 @@ st.markdown(
         gap: 12px; overflow: hidden;
     }}
     .driver-card-content {{min-width:0; flex:1; display:flex; align-items:center; gap:14px;}}
-    .driver-identity {{display:flex; flex-direction:column; align-items:center; gap:4px;}}
-    .driver-image-row {{display:flex; align-items:flex-end; gap:10px;}}
-    .driver-team-col {{display:flex; flex-direction:column; align-items:center; gap:2px;}}
+    .driver-identity {{display:flex; flex-direction:column; align-items:flex-start; gap:4px;}}
+    .driver-label {{display:flex; align-items:center; gap:8px;}}
+    .driver-image-row {{display:flex; align-items:flex-start; gap:10px;}}
     .driver-acronym {{font-size:1rem; font-weight:800; line-height:1.2;}}
-    .driver-headshot {{height: 100px; width: 100px; object-fit: contain;}}
+    .driver-headshot {{height: 115px; width: 115px; object-fit: contain;}}
     .driver-flag {{
         display:inline-flex; align-items:center; margin-left:7px;
         vertical-align:-3px;
@@ -140,7 +140,7 @@ st.markdown(
         font-size:27px; font-weight:900; line-height:1.2; text-align:center; white-space:nowrap;
     }}
     .driver-number {{font-size:1rem; font-weight:800; line-height:1.2;}}
-    .team-logo {{height:76px; width:auto; max-width:115px; object-fit:contain;}}
+    .team-logo {{height:87px; width:auto; max-width:132px; object-fit:contain;}}
     .team-logo-fallback {{
         width:25px; height:25px; border-radius:6px; display:inline-flex;
         align-items:center; justify-content:center; color:#fff; font-size:.61rem; font-weight:900;
