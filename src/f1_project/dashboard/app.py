@@ -119,7 +119,7 @@ st.markdown(
         gap: 12px; overflow: hidden;
     }}
     .driver-card-content {{min-width:0; flex:1; display:flex; align-items:center; gap:14px;}}
-    .driver-headshot {{height: 64px; width: 64px; object-fit: contain; align-self: flex-end;}}
+    .driver-headshot {{height: 64px; width: 64px; object-fit: contain;}}
     .driver-flag {{
         display:inline-flex; align-items:center; margin-left:7px;
         vertical-align:-3px;
@@ -134,19 +134,12 @@ st.markdown(
     }}
     .driver-role {{color: {MUTED}; font-size: .72rem; text-transform: uppercase;}}
     .driver-name {{font-size: 1rem; font-weight: 800; line-height: 1.2;}}
-    .driver-team {{display:flex; align-items:center; gap:7px; margin-top:5px; color:{MUTED};}}
-    .driver-number {{
-        min-width:28px; padding:2px 6px; border-radius:6px; text-align:center;
-        color:{TEXT}; font-size:.75rem; font-weight:900; border:1px solid {BORDER};
-    }}
-    .team-logo {{width:25px; height:25px; object-fit:contain;}}
+    .driver-fullname {{display:flex; align-items:center; gap:8px; margin-top:5px;}}
+    .driver-number {{font-size:1rem; font-weight:800; line-height:1.2;}}
+    .team-logo {{height:24px; width:auto; max-width:130px; object-fit:contain;}}
     .team-logo-fallback {{
         width:25px; height:25px; border-radius:6px; display:inline-flex;
         align-items:center; justify-content:center; color:#fff; font-size:.61rem; font-weight:900;
-    }}
-    .team-name {{
-        font-size:.72rem; font-weight:700; white-space:nowrap;
-        overflow:hidden; text-overflow:ellipsis;
     }}
     .driver-card-main {{min-width:0; flex:1;}}
     .driver-championship {{
@@ -300,7 +293,7 @@ with filt_cols[3]:
         "Piloto A",
         driver_numbers,
         index=0,
-        format_func=lambda n: f"🔵  {driver_names.get(n, str(n))}",
+        format_func=lambda n: f"#{n}  🔵  {driver_names.get(n, str(n))}",
     )
 with filt_cols[4]:
     default_b = 1 if len(driver_numbers) > 1 else 0
@@ -308,7 +301,7 @@ with filt_cols[4]:
         "Piloto B",
         driver_numbers,
         index=default_b,
-        format_func=lambda n: f"🟡  {driver_names.get(n, str(n))}",
+        format_func=lambda n: f"#{n}  🟡  {driver_names.get(n, str(n))}",
     )
 
 st.markdown(

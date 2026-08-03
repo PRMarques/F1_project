@@ -284,35 +284,26 @@ def recent_results_html(results: list[str] | None) -> str:
     )
 
 
-def team_identity_html(driver: pd.Series) -> str:
-    """Exibe número e equipe da sessão; usa logo PNG local quando disponível."""
+def team_logo_html(driver: pd.Series) -> str:
+    """Logo da equipe atual do piloto; usa PNG local quando disponível."""
     team_name = str(driver.get("team_name") or "Equipe não informada").strip()
     team_colour = str(driver.get("team_colour") or "555B66").strip().lstrip("#")
     if not re.fullmatch(r"[0-9A-Fa-f]{6}", team_colour):
         team_colour = "555B66"
 
-    number_value = pd.to_numeric(pd.Series([driver.get("driver_number")]), errors="coerce").iloc[0]
-    number = str(int(number_value)) if pd.notna(number_value) else "—"
-
     logo_dir = Path(__file__).resolve().parent / "assets" / "team_logos"
     logo_path = logo_dir / f"{asset_slug(team_name)}.png"
     if logo_path.is_file():
         encoded = base64.b64encode(logo_path.read_bytes()).decode("ascii")
-        logo = (
+        return (
             f'<img class="team-logo" src="data:image/png;base64,{encoded}" '
             f'alt="Logo {escape(team_name, quote=True)}">'
         )
-    else:
-        initials = "".join(word[0] for word in team_name.split()[:2]).upper() or "F1"
-        logo = (
-            f'<span class="team-logo-fallback" style="background:#{team_colour};">'
-            f"{escape(initials)}</span>"
-        )
 
+    initials = "".join(word[0] for word in team_name.split()[:2]).upper() or "F1"
     return (
-        '<div class="driver-team">'
-        f'<span class="driver-number">#{escape(number)}</span>{logo}'
-        f'<span class="team-name">{escape(team_name)}</span></div>'
+        f'<span class="team-logo-fallback" style="background:#{team_colour};">'
+        f"{escape(initials)}</span>"
     )
 
 
@@ -368,6 +359,11 @@ def driver_card(
     """Cartão compacto com cor, bandeira e foto oficial fornecida pela OpenF1."""
     full_name = escape(str(driver.get("full_name") or driver.get("name_acronym") or "Piloto"))
     acronym = escape(str(driver.get("name_acronym") or ""))
+    raw_number = driver.get("driver_number")
+    if pd.isna(raw_number):
+        raw_number = driver.name  # driver_rows usa driver_number como índice do Series
+    number_value = pd.to_numeric(pd.Series([raw_number]), errors="coerce").iloc[0]
+    number = str(int(number_value)) if pd.notna(number_value) else "—"
     flag = country_flag(driver.get("country_code"), driver.get("name_acronym"))
     headshot = driver.get("headshot_url")
     image = (
@@ -380,8 +376,9 @@ def driver_card(
         f'<div class="driver-card" style="border-left:4px solid {color};">'
         f'{image}<div class="driver-card-content"><div class="driver-card-main">'
         f'<div class="driver-role">{escape(role)}</div>'
-        f'<div class="driver-name" style="color:{color};">● {acronym}{flag}</div>'
-        f"<div>{full_name}</div>{team_identity_html(driver)}</div>"
+        f'<div class="driver-name" style="color:{color};">'
+        f'<span class="driver-number">#{escape(number)}</span> ● {acronym}{flag}</div>'
+        f'<div class="driver-fullname"><span>{full_name}</span>{team_logo_html(driver)}</div></div>'
         f"{championship_line(standing, recent_results)}</div></div>"
     )
 
