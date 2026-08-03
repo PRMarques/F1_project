@@ -284,6 +284,13 @@ def recent_results_html(results: list[str] | None) -> str:
     )
 
 
+def brand_logo_html() -> str:
+    """Logo da Formula 1 usada no cabeçalho do dashboard."""
+    logo_path = Path(__file__).resolve().parent / "assets" / "team_logos" / "formula1.png"
+    encoded = base64.b64encode(logo_path.read_bytes()).decode("ascii")
+    return f'<img class="brand-badge" src="data:image/png;base64,{encoded}" alt="Logo Formula 1">'
+
+
 def team_logo_html(driver: pd.Series) -> str:
     """Logo da equipe atual do piloto; usa PNG local quando disponível."""
     team_name = str(driver.get("team_name") or "Equipe não informada").strip()
@@ -374,11 +381,16 @@ def driver_card(
     )
     return (
         f'<div class="driver-card" style="border-left:4px solid {color};">'
-        f'{image}<div class="driver-card-content"><div class="driver-card-main">'
+        '<div class="driver-identity">'
+        '<div class="driver-image-row">'
+        f"{image}"
+        '<div class="driver-team-col">'
         f'<div class="driver-role">{escape(role)}</div>'
-        f'<div class="driver-name" style="color:{color};">'
+        f'<div class="driver-acronym" style="color:{color};">'
         f'<span class="driver-number">#{escape(number)}</span> ● {acronym}{flag}</div>'
-        f'<div class="driver-fullname"><span>{full_name}</span>{team_logo_html(driver)}</div></div>'
+        f"{team_logo_html(driver)}</div></div>"
+        f'<div class="driver-fullname">{full_name}</div></div>'
+        f'<div class="driver-card-content">'
         f"{championship_line(standing, recent_results)}</div></div>"
     )
 

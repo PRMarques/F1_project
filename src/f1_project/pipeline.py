@@ -44,6 +44,29 @@ def _parse_session_key(value: str) -> int | str:
     return int(value)
 
 
+def _resolve_race_session(
+    client: OpenF1Client, key: int | str, race_session_keys: set[int]
+) -> tuple[int | str, bool]:
+    """Resolve `key` para o `session_key` real e se essa sessão é uma corrida.
+
+    Para um `key` numérico, a resposta já está em `race_session_keys` (calculado a partir
+    da lista de sessões do ano). Para a keyword `latest`, a OpenF1 resolve a sessão atual
+    no próprio servidor a cada chamada — `race_session_keys` nunca contém a string
+    `latest`, então uma consulta dedicada a `sessions` é necessária para descobrir a que
+    `session_key`/`session_name` reais ela corresponde nesse momento.
+    """
+    if key != LATEST_SESSION_KEYWORD:
+        return key, key in race_session_keys
+
+    sessions = endpoints.get_sessions(client, session_key=LATEST_SESSION_KEYWORD)
+    if not sessions:
+        return key, False
+
+    session = sessions[0]
+    real_key = session.get("session_key", key)
+    return real_key, session.get("session_name") == RACE_SESSION_NAME
+
+
 def _ingest_entity(
     client: OpenF1Client,
     fetch_fn: Callable[..., list[dict[str, Any]]],
@@ -103,22 +126,24 @@ def _ingest_year(
 
     for key in session_keys:
         try:
+            resolved_key, is_race = _resolve_race_session(client, key, race_session_keys)
+
             _ingest_entity(
                 client,
                 endpoints.get_drivers,
                 "drivers",
-                str(key),
+                str(resolved_key),
                 DriverSchema,
                 "session_key",
                 session_key=key,
             )
 
-            if key in race_session_keys:
+            if is_race:
                 _ingest_entity(
                     client,
                     endpoints.get_laps,
                     "laps",
-                    str(key),
+                    str(resolved_key),
                     LapSchema,
                     "session_key",
                     session_key=key,
@@ -127,7 +152,7 @@ def _ingest_year(
                     client,
                     endpoints.get_session_result,
                     "session_result",
-                    str(key),
+                    str(resolved_key),
                     SessionResultSchema,
                     "session_key",
                     session_key=key,
