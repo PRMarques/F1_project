@@ -118,9 +118,9 @@ st.markdown(
         gap: 12px; overflow: hidden;
     }}
     .driver-card-content {{min-width:0; flex:1; display:flex; align-items:center; gap:14px;}}
-    .driver-identity {{display:flex; flex-direction:column; align-items:center; gap:4px;}}
-    .driver-image-row {{display:flex; align-items:flex-end; gap:10px;}}
-    .driver-team-col {{display:flex; flex-direction:column; align-items:flex-start; gap:2px;}}
+    .driver-identity {{display:flex; flex-direction:column; align-items:flex-start; gap:4px;}}
+    .driver-label {{display:flex; align-items:center; gap:8px;}}
+    .driver-image-row {{display:flex; align-items:flex-start; gap:10px;}}
     .driver-acronym {{font-size:1rem; font-weight:800; line-height:1.2;}}
     .driver-headshot {{height: 115px; width: 115px; object-fit: contain;}}
     .driver-flag {{
@@ -135,7 +135,7 @@ st.markdown(
     .driver-flag-fallback {{
         color:{MUTED}; font-size:.68rem; font-weight:700; letter-spacing:.03em;
     }}
-    .driver-role {{color: {MUTED}; font-size: .72rem; text-transform: uppercase; margin-top:15px;}}
+    .driver-role {{color: {MUTED}; font-size: .72rem; text-transform: uppercase;}}
     .driver-fullname {{
         font-size:27px; font-weight:900; line-height:1.2; text-align:center; white-space:nowrap;
     }}
