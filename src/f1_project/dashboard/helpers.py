@@ -102,6 +102,24 @@ def api_get(endpoint: str, timeout: int = 30, **params: Any) -> pd.DataFrame:
     return pd.DataFrame()
 
 
+def default_meeting_index(meetings: pd.DataFrame, now: pd.Timestamp | None = None) -> int:
+    """Posição do último GP que já aconteceu, na ordem de `meetings` (mais recente primeiro).
+
+    Evita que o dashboard abra por padrão numa corrida futura só porque é a última do
+    calendário: `meetings` já vem ordenado por `date_start` decrescente, então a primeira
+    linha com data no passado é o GP mais recente já disputado. Sem nenhum GP passado
+    (ex.: início de temporada), volta para a primeira linha (comportamento anterior).
+    """
+    if meetings.empty:
+        return 0
+    reference = now if now is not None else pd.Timestamp.now(tz="UTC")
+    dates = pd.to_datetime(meetings["date_start"], errors="coerce", utc=True)
+    for position, date in enumerate(dates):
+        if pd.notna(date) and date <= reference:
+            return position
+    return 0
+
+
 def seconds_to_lap(value: float | None) -> str:
     if value is None or pd.isna(value):
         return "—"

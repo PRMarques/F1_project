@@ -43,6 +43,43 @@ def test_asset_slug_removes_accents_and_punctuation() -> None:
     assert helpers.asset_slug("  Multiple   Spaces!! ") == "multiple-spaces"
 
 
+# --- default_meeting_index --------------------------------------------------------------
+
+
+def _meetings(*dates: str) -> pd.DataFrame:
+    return pd.DataFrame(
+        {
+            "meeting_key": range(1, len(dates) + 1),
+            "date_start": list(dates),
+        }
+    )
+
+
+def test_default_meeting_index_skips_future_meetings() -> None:
+    meetings = _meetings("2026-11-30", "2026-07-20", "2026-03-08")
+    now = pd.Timestamp("2026-08-03", tz="UTC")
+
+    assert helpers.default_meeting_index(meetings, now=now) == 1
+
+
+def test_default_meeting_index_returns_zero_when_first_meeting_already_past() -> None:
+    meetings = _meetings("2026-07-20", "2026-03-08")
+    now = pd.Timestamp("2026-08-03", tz="UTC")
+
+    assert helpers.default_meeting_index(meetings, now=now) == 0
+
+
+def test_default_meeting_index_falls_back_to_zero_when_all_meetings_are_future() -> None:
+    meetings = _meetings("2027-03-01", "2027-02-01")
+    now = pd.Timestamp("2026-08-03", tz="UTC")
+
+    assert helpers.default_meeting_index(meetings, now=now) == 0
+
+
+def test_default_meeting_index_handles_empty_dataframe() -> None:
+    assert helpers.default_meeting_index(pd.DataFrame(columns=["meeting_key", "date_start"])) == 0
+
+
 # --- circuit_image_data ---------------------------------------------------------------
 
 

@@ -30,6 +30,7 @@ from f1_project.dashboard.helpers import (
     best_sector_times,
     chart_style,
     circuit_image_data,
+    default_meeting_index,
     detect_retirements,
     driver_card,
     driver_summary,
@@ -263,7 +264,10 @@ if not meeting_labels:
 
 with filt_cols[1]:
     meeting_key = st.selectbox(
-        "Grande Prêmio", list(meeting_labels), format_func=meeting_labels.get
+        "Grande Prêmio",
+        list(meeting_labels),
+        index=default_meeting_index(meetings),
+        format_func=meeting_labels.get,
     )
 
 sessions = api_get("sessions", meeting_key=meeting_key).sort_values("date_start")
