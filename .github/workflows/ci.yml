@@ -35,3 +35,35 @@ jobs:
 
       - name: Build da documentação
         run: poetry run mkdocs build --strict
+
+  deploy-docs:
+    needs: build
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12.10"
+
+      - name: Instalar Poetry
+        run: pipx install poetry
+
+      - name: Configurar venv no projeto
+        run: poetry config virtualenvs.in-project true
+
+      - name: Instalar dependências
+        run: poetry install
+
+      - name: Configurar Git
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+
+      - name: Deploy da documentação
+        run: poetry run mkdocs gh-deploy --force
